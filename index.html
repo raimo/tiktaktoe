@@ -1,0 +1,106 @@
+<script src="jquery-2.1.1.min.js"> </script>
+<script>
+    var H = 50, W = 40;
+    //var H = 3, W = 3;
+    var read = function(x,y) {
+        return $('table tr').eq(y).find('td').eq(x);
+    }
+    var clear = function() {
+        $('td').css('background-color', 'white');
+    };
+    var check = function(x,y, sec) {
+        var mm = {
+            'XXXXX' : '#5daa00',
+            'OOOOO' : '#5daa00',
+        };
+        var aa = {
+            ' XXXX' : 'red',
+            ' OOOO' : 'red',
+        };
+        var bb = {
+            'XXXX ' : 'red',
+            'OOOO ' : 'red',
+        };
+        var dd = {
+            ' XXX ' : 'red',
+            ' OOO ' : 'red',
+        };
+        var xs = '', ys = '', xy = '', yx = '';
+        for (var i=0; i< 5; i++) {
+            var a = read(x,y+i).html(), b = read(x+i,y).html(), c = read(x+i,y+i).html(), d = read(x+i,y-i).html();
+            xs += a;
+            ys += b;
+            xy += c;
+            yx += d;
+        }
+        if (!sec) {
+            if (dd[xs]) for (var i=1; i< 4; i++) read(x,y+i).css('background-color', dd[xs]);
+            if (dd[ys]) for (var i=1; i< 4; i++) read(x+i,y).css('background-color', dd[ys]);
+            if (dd[xy]) for (var i=1; i< 4; i++) read(x+i,y+i).css('background-color', dd[xy]);
+            if (dd[yx]) for (var i=1; i< 4; i++) read(x+i,y-i).css('background-color', dd[yx]);
+
+            if (aa[xs]) for (var i=1; i< 5; i++) read(x,y+i).css('background-color', aa[xs]);
+            if (aa[ys]) for (var i=1; i< 5; i++) read(x+i,y).css('background-color', aa[ys]);
+            if (aa[xy]) for (var i=1; i< 5; i++) read(x+i,y+i).css('background-color', aa[xy]);
+            if (aa[yx]) for (var i=1; i< 5; i++) read(x+i,y-i).css('background-color', aa[yx]);
+
+            if (bb[xs]) for (var i=0; i< 4; i++) read(x,y+i).css('background-color', bb[xs]);
+            if (bb[ys]) for (var i=0; i< 4; i++) read(x+i,y).css('background-color', bb[ys]);
+            if (bb[xy]) for (var i=0; i< 4; i++) read(x+i,y+i).css('background-color', bb[xy]);
+            if (bb[yx]) for (var i=0; i< 4; i++) read(x+i,y-i).css('background-color', bb[yx]);
+
+        } else {
+            if (mm[xs]) for (var i=0; i< 5; i++) read(x,y+i).css('background-color', mm[xs]);
+            if (mm[ys]) for (var i=0; i< 5; i++) read(x+i,y).css('background-color', mm[ys]);
+            if (mm[xy]) for (var i=0; i< 5; i++) read(x+i,y+i).css('background-color', mm[xy]);
+            if (mm[yx]) for (var i=0; i< 5; i++) read(x+i,y-i).css('background-color', mm[yx]);
+        }
+
+    };
+    $(function() {
+        for (var i=0; i< H; i++) {
+            var $row = $('<tr>');
+            for (var j=0; j< W; j++) {
+                $row.append('<td data-x=' + j + ' data-y=' + i + '> </td>');
+            }
+
+            $('table tbody').append($row);
+        }
+        var sign = 'X';
+        $('td').click(function() {
+            $(this).html(sign);
+            sign = sign == 'X' ? 'O' : 'X';
+
+            clear();
+            for (var i=Math.max(0,$(this).data('y')-4); i< Math.min(H,$(this).data('y')+4); i++) {
+                for (var j=Math.max(0,$(this).data('x')-4); j< Math.min(W,$(this).data('x')+4); j++) {
+                    check(j,i);
+                }
+            }
+            for (var i=Math.max(0,$(this).data('y')-4); i< Math.min(H,$(this).data('y')+4); i++) {
+                for (var j=Math.max(0,$(this).data('x')-4); j< Math.min(W,$(this).data('x')+4); j++) {
+                    check(j,i, true);
+                }
+            }
+        });
+    });
+
+</script>
+<style>
+  table {
+      border-bottom: 3px solid #5daa00;
+      margin-bottom: 30px;
+  }
+  table td {
+    width: 80px;
+    height: 32px;
+    border: 1px solid #aaa;
+  }
+</style>
+<table>
+  <tbody>
+  </tbody>
+</table>
+<script>
+
+</script>
